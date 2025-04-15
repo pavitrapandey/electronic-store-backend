@@ -5,6 +5,11 @@ import com.electronic.store.entities.User;
 
 import java.util.List;
 
+/**
+ * @author Pavitra
+ * @project electronic-store
+ * @created 15/04/2025
+ */
 public interface UserService {
 
     UserDto createUser(UserDto userDto);

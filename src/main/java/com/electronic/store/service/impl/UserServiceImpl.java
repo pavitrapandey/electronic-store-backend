@@ -4,6 +4,7 @@ import com.electronic.store.Repository.UserRepository;
 import com.electronic.store.dtos.UserDto;
 import com.electronic.store.entities.User;
 import com.electronic.store.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -55,10 +59,9 @@ public class UserServiceImpl implements UserService {
         // Save the updated user
         User updatedUser = userRepository.save(user);
         // Convert the updated user entity back to DTO
-        UserDto updatedUserDto = entityToUserDto(updatedUser);
         // Return the updated user DTO
 
-        return updatedUserDto;
+        return entityToUserDto(updatedUser);
     }
 
     @Override
@@ -101,29 +104,13 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserDto entityToUserDto(User savedUser){
-        UserDto userDto= UserDto.builder()
-                .userId(savedUser.getUserId())
-                .name(savedUser.getName())
-                .email(savedUser.getEmail())
-                .password(savedUser.getPassword())
-                .about(savedUser.getAbout())
-                .imageName(savedUser.getImageName())
-                .gender(savedUser.getGender())
-                .build();
-        return userDto;
+
+        return modelMapper.map(savedUser,UserDto.class);
 
     }
 
     private User dtoToEntity(UserDto userDto){
-        User user=User.builder()
-                .userId(userDto.getUserId())
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .about(userDto.getAbout())
-                .imageName(userDto.getImageName())
-                .gender(userDto.getGender())
-                .build();
-        return user;
+
+        return modelMapper.map(userDto,User.class);
     }
 }
