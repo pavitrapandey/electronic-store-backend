@@ -4,6 +4,7 @@ package com.electronic.store.Controller;
 import com.electronic.store.dtos.ApiResponseMessage;
 import com.electronic.store.dtos.UserDto;
 import com.electronic.store.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,14 +24,14 @@ public class UserController {
 
     //create user
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto){
         UserDto user = userService.createUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     //update user
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable("userId") String userId, @RequestBody UserDto userDto){
+    public ResponseEntity<UserDto> updateUser(@Valid  @PathVariable("userId") String userId, @RequestBody UserDto userDto){
         UserDto updatedUser = userService.updateUser(userId, userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
@@ -58,8 +59,13 @@ public class UserController {
 
     //get all users
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    public ResponseEntity<List<UserDto>> getAllUsers(
+            @RequestParam(value = "pageNumber", defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "size",defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "name",required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
+    ){
+        return new ResponseEntity<>(userService.getAllUsers(pageNumber,pageSize,sortBy,sortDir), HttpStatus.OK);
     }
 
 //get user by email

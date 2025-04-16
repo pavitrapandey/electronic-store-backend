@@ -12,11 +12,8 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User,String> {
 
-
-
     Optional<User> findByEmail(String email);
-
-
     @Query("SELECT u FROM User u WHERE u.name LIKE %:keyword% OR u.email LIKE %:keyword% OR u.gender LIKE %:keyword%")
     List<User> findByKeyword(@Param("keyword") String keyword);
+
 }

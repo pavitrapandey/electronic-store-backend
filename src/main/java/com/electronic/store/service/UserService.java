@@ -16,7 +16,9 @@ public interface UserService {
     UserDto getUserById(String userId);
     UserDto updateUser(String userId, UserDto userDto);
     void deleteUser(String userId);
-    List<UserDto> getAllUsers();
+    List<UserDto> getAllUsers(int pageNumber, int pageSize, String sortBy, String sortDir);
     UserDto getUserByEmail(String email);
     List<UserDto> searchUser(String Keyword);
+
+
 }
