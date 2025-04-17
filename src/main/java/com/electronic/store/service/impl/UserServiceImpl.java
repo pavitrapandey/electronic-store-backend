@@ -3,17 +3,25 @@ package com.electronic.store.service.impl;
 import com.electronic.store.Exception.EmailAlreadyExistException;
 import com.electronic.store.Exception.ResourceNotFoundException;
 import com.electronic.store.Repository.UserRepository;
+import com.electronic.store.dtos.PageableRespond;
 import com.electronic.store.dtos.UserDto;
 import com.electronic.store.entities.User;
+import com.electronic.store.helper.Helper;
 import com.electronic.store.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.*;
 
@@ -26,6 +34,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Value("${user.profile.image.path}")
+   private String filePath;
 
     // Create a new user
     @Override
@@ -84,25 +94,35 @@ public class UserServiceImpl implements UserService {
 
     // Delete user by ID
     @Override
-    public void deleteUser(String userId) {
+    public void deleteUser(String userId) throws IOException {
         User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+
+        String imageName=user.getImageName();
+        String fullPath=filePath+imageName;
+
+        Path path=Path.of(fullPath);
+        try {
+            Files.delete(path);
+        } catch (NoSuchFileException e) {
+            e.printStackTrace();
+        }
+
+
         userRepository.delete(user);
     }
 
     // Get all users
     @Override
-    public List<UserDto> getAllUsers(
+    public PageableRespond<UserDto> getAllUsers(
             int pageNumber,
             int pageSize,
             String sortBy,
             String sortDir
     )
     {
+        // Create a sort object based on the provided sort direction
         Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()) :(Sort.by(sortBy).ascending()) ;
-        // Check the sort direction
-
-
-        Pageable pageable= PageRequest.of(pageNumber, pageSize, sort);
+        Pageable pageable= PageRequest.of(pageNumber-1, pageSize, sort);
 
         // Create a pageable object with the specified page number and size
         Page<User> page = userRepository.findAll(pageable);
@@ -115,8 +135,11 @@ public class UserServiceImpl implements UserService {
                 .map(user -> entityToUserDto(user))
                 .collect(Collectors.toList());
 
-        // Return the list of user DTOs
-        return userDtos;
+        // Create a pageable response object
+        PageableRespond<UserDto> respond= Helper.getPageableResponse(page,UserDto.class);
+
+        // Return the pageable response
+        return respond;
     }
 
     // Get user by email
