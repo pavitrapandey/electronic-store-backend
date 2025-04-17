@@ -11,11 +11,10 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CategoryDtos {
+public class CategoryDto{
 
-    private int categoryId;
+    private String categoryId;
     @NotBlank
-    @Min(value = 3, message = "Title must be at least 3 characters")
     private String title;
     @NotBlank
     private String description;

@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
     {
         // Create a sort object based on the provided sort direction
         Sort sort=(sortDir.equalsIgnoreCase("desc"))?(Sort.by(sortBy).descending()) :(Sort.by(sortBy).ascending()) ;
-        Pageable pageable= PageRequest.of(pageNumber-1, pageSize, sort);
+        Pageable pageable= PageRequest.of(pageNumber, pageSize, sort);
 
         // Create a pageable object with the specified page number and size
         Page<User> page = userRepository.findAll(pageable);

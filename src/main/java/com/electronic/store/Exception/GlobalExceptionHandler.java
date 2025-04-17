@@ -59,4 +59,15 @@ public class GlobalExceptionHandler {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    //CategoryAlreadyExistException
+    @ExceptionHandler(CategoryAlreadyExistException.class)
+    public ResponseEntity<ApiResponseMessage> handleCategoryAlreadyExistException(CategoryAlreadyExistException ex){
+        ApiResponseMessage response= ApiResponseMessage.builder()
+                .message(ex.getMessage())
+                .success(false)
+                .status(HttpStatus.BAD_REQUEST)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 }

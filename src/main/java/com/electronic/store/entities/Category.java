@@ -20,7 +20,7 @@ public class Category {
 
     @Id
     @Column(name = "id")
-    private int categoryId;
+    private String categoryId;
 
     @Column(name = "Category_title",length = 30,nullable = false)
     private String title;
