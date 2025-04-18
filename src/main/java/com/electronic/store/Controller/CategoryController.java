@@ -1,11 +1,9 @@
 package com.electronic.store.Controller;
 
-import com.electronic.store.dtos.CategoryDto;
-import com.electronic.store.dtos.ImageResponse;
-import com.electronic.store.dtos.PageableRespond;
-import com.electronic.store.dtos.UserDto;
+import com.electronic.store.dtos.*;
 import com.electronic.store.service.CategoryService;
 import com.electronic.store.service.FileService;
+import com.electronic.store.service.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +28,11 @@ public class CategoryController {
     @Autowired
     private FileService fileService;
 
+    @Autowired
+    private ProductService productService;
+
     @Value("${category.image.path}")
-    private String imageUploadPath;
+    private String UploadPath;
 
     //create category
     @PostMapping
@@ -81,7 +82,7 @@ public class CategoryController {
             @RequestParam("image") MultipartFile image,
             @PathVariable String categoryId
     ) throws IOException {
-        String imageName=  fileService.uploadImage(image,imageUploadPath);
+        String imageName=  fileService.uploadImage(image,UploadPath);
        CategoryDto categoryDto= categoryService.getCategoryById(categoryId);
        categoryDto.setCoverImage(imageName);
         CategoryDto updated= categoryService.update(categoryDto,categoryId);
@@ -95,11 +96,42 @@ public class CategoryController {
     //serve category image
     @GetMapping("/image/{categoryId}")
     public void serveUserImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
-
         CategoryDto category = categoryService.getCategoryById(categoryId);
-        InputStream resource = fileService.getResource(imageUploadPath, category.getCoverImage());
+        InputStream resource = fileService.getResource(UploadPath, category.getCoverImage());
         response.setContentType(MediaType.IMAGE_JPEG_VALUE);
         StreamUtils.copy(resource, response.getOutputStream());
     }
 
+    @PostMapping("/{categoryId}/products")
+    public ResponseEntity<ProductDto> createProductByCategory(
+            @PathVariable("categoryId") String categoryId,
+            @RequestBody  ProductDto productDto
+    )
+    {
+        ProductDto createdProduct = productService.createProductByCategory(productDto, categoryId);
+        return new ResponseEntity<>(createdProduct, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{categoryId}/products/{productId}")
+    public ResponseEntity<ProductDto> updateProductByCategory(
+            @PathVariable("categoryId") String categoryId,
+            @PathVariable("productId") String productId
+    )
+    {
+        ProductDto updatedProduct = productService.updateProductByCategory(productId, categoryId);
+        return new ResponseEntity<>(updatedProduct, HttpStatus.OK);
+    }
+
+    @GetMapping("/{categoryId}/products")
+    public ResponseEntity<PageableRespond<ProductDto>> getAllProductsByCategory(
+            @PathVariable("categoryId") String categoryId,
+            @RequestParam(value = "pageNumber", defaultValue = "0",required = false) int pageNumber,
+            @RequestParam(value = "size",defaultValue = "10",required = false) int pageSize,
+            @RequestParam(value = "sortBy",defaultValue = "title",required = false) String sortBy,
+            @RequestParam(value = "sortDir",defaultValue = "asc",required = false) String sortDir
+    )
+    {
+        PageableRespond<ProductDto> productsByCategory = productService.getAllProductsByCategory(categoryId, pageNumber, pageSize, sortBy, sortDir);
+        return new ResponseEntity<>(productsByCategory, HttpStatus.OK);
+    }
 }

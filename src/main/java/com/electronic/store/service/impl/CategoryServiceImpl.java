@@ -11,6 +11,8 @@ import com.electronic.store.entities.User;
 import com.electronic.store.helper.Helper;
 import com.electronic.store.service.CategoryService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.ErrorManager;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +41,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Value("${category.image.path}")
     private String FilePath;
+
+    Logger logger= LoggerFactory.getLogger(CategoryServiceImpl.class);
 
     @Override
     public CategoryDto create(CategoryDto categoryDto){
@@ -94,7 +99,8 @@ public class CategoryServiceImpl implements CategoryService {
         try {
             Files.delete(path);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Failed to delete file: " + fullPath, e);
+            throw new ResourceNotFoundException("Failed to delete file: " + fullPath);  // Custom exception
         }
         //Delete the category
         categoryRepository.delete(category);
