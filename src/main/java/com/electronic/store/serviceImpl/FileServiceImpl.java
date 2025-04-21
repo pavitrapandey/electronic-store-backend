@@ -1,4 +1,4 @@
-package com.electronic.store.service.impl;
+package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.BadRequestApiException;
 import com.electronic.store.service.FileService;

@@ -23,6 +23,12 @@ A Spring Boot based backend for an electronic store application, built with a mo
 - Add/Update the Product CartItem
 - Delete the CartItem
 - Get The Cart By User
+
+### 💳Order Module
+- Create/Get Order
+- Update Order Status
+- Remove Order
+
 ### 🔒 Additional Enhancements
 - Input Validation
 - Custom Exception Handling
@@ -57,7 +63,6 @@ Pull requests are welcome! Feel free to fork and raise issues or suggest improve
 ---
 
 ## 📌 Upcoming Features
-- Order Management Module
 - Security
 - Deployment on Cloud
 

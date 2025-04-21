@@ -1,4 +1,4 @@
-package com.electronic.store.service.impl;
+package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.BadRequestApiException;
 import com.electronic.store.Exception.ResourceNotFoundException;
@@ -22,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -67,16 +66,15 @@ public class CartServiceImpl implements CartService {
         //Create cart item
         //if item is already present in the cart then update the quantity and total price
         AtomicReference<Boolean> isPresent= new AtomicReference<>(false);
-        List<CartItem> items=cart.getCartItem();
-        List<CartItem> updatedItem=items.stream().map(item->{
-            if(item.getProduct().getProductId().equals(request.getProductId())){
-                item.setQuantity(item.getQuantity()+quantity);
-                item.setTotalPrice(item.getTotalPrice()+quantity*product.getPrice());
+        List<CartItem> items = cart.getCartItem();
+        for (CartItem item : items) {
+            if (item.getProduct().getProductId().equals(request.getProductId())) {
+                item.setQuantity(item.getQuantity() + quantity);
+                item.setTotalPrice(item.getTotalPrice() + quantity * product.getPrice());
                 isPresent.set(true);
+                break;
             }
-            return item;
-        }).collect(Collectors.toList());
-        cart.setCartItem(updatedItem);
+        }
 
         //If item is not present in the cart then add the item to the cart
         if(!isPresent.get()){
@@ -141,7 +139,7 @@ public class CartServiceImpl implements CartService {
             item.setCart(null); // break relation
         }
 
-        items.clear();
+        cart.getCartItem().clear();
 
         cart.setCartTotal(0); // reset cart total
         cartRepository.save(cart);

@@ -1,11 +1,10 @@
-package com.electronic.store.service.impl;
+package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.ResourceNotFoundException;
 import com.electronic.store.Repository.CategoryRepository;
 import com.electronic.store.Repository.ProductRepository;
 import com.electronic.store.dtos.PageableRespond;
 import com.electronic.store.dtos.ProductDto;
-import com.electronic.store.dtos.UserDto;
 import com.electronic.store.entities.Category;
 import com.electronic.store.entities.Product;
 import com.electronic.store.helper.Helper;
@@ -26,11 +25,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
-import static java.lang.System.currentTimeMillis;
 
 @Service
 public class ProductServiceImpl implements ProductService {

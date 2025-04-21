@@ -1,13 +1,11 @@
-package com.electronic.store.service.impl;
+package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.CategoryAlreadyExistException;
 import com.electronic.store.Exception.ResourceNotFoundException;
 import com.electronic.store.Repository.CategoryRepository;
 import com.electronic.store.dtos.CategoryDto;
 import com.electronic.store.dtos.PageableRespond;
-import com.electronic.store.dtos.UserDto;
 import com.electronic.store.entities.Category;
-import com.electronic.store.entities.User;
 import com.electronic.store.helper.Helper;
 import com.electronic.store.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -23,11 +21,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.ErrorManager;
 import java.util.stream.Collectors;
 
 @Service

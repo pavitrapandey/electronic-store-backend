@@ -1,4 +1,4 @@
-package com.electronic.store.service.impl;
+package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.EmailAlreadyExistException;
 import com.electronic.store.Exception.ResourceNotFoundException;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
