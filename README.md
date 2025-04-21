@@ -14,18 +14,15 @@ A Spring Boot based backend for an electronic store application, built with a mo
 - Upload and serve category **cover images**
 
 ### 📦 Product Module
-- Add Product
-- Update Product
-- Delete Product
-- Get All Products
-- Get Product by ID
+- Add/Update/Delete/Get Product
 - Get All Live Products
-- Get Products Between Price Range
-- Delete Products Between Price Range
-- Create Products by Category
-- Update Products by Category
-- Get All Products by Category
+- Get/Delete Products Between Price Range
+- Create/Update/Delete Products by Category
 
+### 🛒 Cart and Cart item Module
+- Add/Update the Product CartItem
+- Delete the CartItem
+- Get The Cart By User
 ### 🔒 Additional Enhancements
 - Input Validation
 - Custom Exception Handling
@@ -34,7 +31,7 @@ A Spring Boot based backend for an electronic store application, built with a mo
 ## 🛠️ Tech Stack
 - Java 17
 - Spring Boot
-- Spring Data Jpa
+- Spring Data Jpa/Hibernate
 - Lombok
 - Maven
 - Mysql
@@ -60,9 +57,9 @@ Pull requests are welcome! Feel free to fork and raise issues or suggest improve
 ---
 
 ## 📌 Upcoming Features
-- Cart Module
 - Order Management Module
 - Security
+- Deployment on Cloud
 
 ---
 

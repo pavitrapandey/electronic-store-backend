@@ -158,8 +158,5 @@ public class CartServiceImpl implements CartService {
         return mapper.map(cart, CartDto.class);
     }
 
-    @Override
-    public void deleteItemByQuantity(String userId, int cartItemId, int quantity) {
 
-    }
 }

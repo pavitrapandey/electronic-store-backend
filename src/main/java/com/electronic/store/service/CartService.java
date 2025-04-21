@@ -18,6 +18,4 @@ public interface CartService {
     // get cart by user
     CartDto getCartByUser(String userId);
 
-    //delete item by quantity
-    void deleteItemByQuantity(String userId, int cartItemId, int quantity);
-}
+    }
