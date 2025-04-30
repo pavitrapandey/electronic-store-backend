@@ -2,9 +2,11 @@ package com.electronic.store.serviceImpl;
 
 import com.electronic.store.Exception.EmailAlreadyExistException;
 import com.electronic.store.Exception.ResourceNotFoundException;
+import com.electronic.store.Repository.RoleRepository;
 import com.electronic.store.Repository.UserRepository;
 import com.electronic.store.dtos.PageableRespond;
 import com.electronic.store.dtos.UserDto;
+import com.electronic.store.entities.Roles;
 import com.electronic.store.entities.User;
 import com.electronic.store.helper.Helper;
 import com.electronic.store.service.UserService;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,6 +39,12 @@ public class UserServiceImpl implements UserService {
     @Value("${user.profile.image.path}")
    private String filePath;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     // Create a new user
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -51,6 +60,16 @@ public class UserServiceImpl implements UserService {
 
         // Convert UserDto to User entity
         User user = dtoToEntity(userDto);
+        // Set the password and encode it
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //assign the Normal role to the user
+        Roles role=new Roles();
+        role.setRoleId(UUID.randomUUID().toString());
+        role.setName("ROLE_NORMAL");
+
+        Roles normal= roleRepository.findByName("ROLE_NORMAL").orElse(role);
+        user.setRoles(List.of(normal));
+
         // Here you would typically save the user to the database
        User user1= userRepository.save(user);
         // Convert the saved user entity back to DTO
@@ -78,7 +97,7 @@ public class UserServiceImpl implements UserService {
         // Update the user details
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setAbout(userDto.getAbout());
         user.setImageName(userDto.getImageName());
         user.setGender(userDto.getGender());

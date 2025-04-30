@@ -9,6 +9,7 @@ import com.electronic.store.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class OrderController{
     private OrderService orderService;
 
     // create order
+    @PreAuthorize("hasRole('NORMAL')")
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@RequestBody CreateOrderRequest order){
         OrderDto orderResponse = orderService.createOrder(order);
@@ -30,6 +32,7 @@ public class OrderController{
     }
 
     // get all orders
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<PageableRespond<OrderDto>> getAllOrders(
             @RequestParam(value = "pageNumber", defaultValue = "0", required = false) int pageNumber,
@@ -41,13 +44,16 @@ public class OrderController{
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
+
     // get order of Single user
+    @PreAuthorize("hasAnyRole('NORMAL','ADMIN')")
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderDto>> getOrderById(@PathVariable String userId){
         List<OrderDto> orderResponse = orderService.getOrderById(userId);
         return new ResponseEntity<>(orderResponse, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{orderId}")
     public ResponseEntity<ApiResponseMessage> deleteOrder(@PathVariable String orderId){
         orderService.deleteOrder(orderId);
@@ -59,6 +65,8 @@ public class OrderController{
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    // update order after purchased
+    @PreAuthorize("hasAnyRole('ADMIN','NORMAL')")
     @PutMapping("{orderId}")
     public ResponseEntity<OrderDto> updateOrder(@PathVariable String orderId,
                                                 @RequestBody CreateOrderRequest request){
