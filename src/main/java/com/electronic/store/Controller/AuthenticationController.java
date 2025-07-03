@@ -1,10 +1,9 @@
 package com.electronic.store.Controller;
 
 import com.electronic.store.Security.JwtHelper;
-import com.electronic.store.dtos.JwtRequest;
-import com.electronic.store.dtos.JwtResponse;
-import com.electronic.store.dtos.UserDto;
+import com.electronic.store.dtos.*;
 import com.electronic.store.entities.User;
+import com.electronic.store.service.RefreshTokenService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +27,29 @@ public class AuthenticationController {
     @Autowired
     private JwtHelper helper;
 
+    @Autowired
+    private RefreshTokenService refreshTokenService;
+
    private Logger logger= org.slf4j.LoggerFactory.getLogger(AuthenticationController.class);
 
    @Autowired
    private UserDetailsService userDetailsService;
+
+   //regenerate token
+    @PostMapping("/regenerate-token")
+    public ResponseEntity<JwtResponse> regenerateToken(@RequestBody RefreshTokenRequest request)
+    {
+        RefreshTokenDto refreshTokenDto = refreshTokenService.findByToken(request.getRefreshToken());
+        RefreshTokenDto refreshTokenDto1=refreshTokenService.verifyToken(refreshTokenDto);
+        UserDto user= refreshTokenService.getUser(refreshTokenDto1);
+        String jwtToken = helper.generateToken(mapper.map(user, User.class));
+        JwtResponse jwtResponse = JwtResponse.builder()
+                .token(jwtToken)
+                .user(user)
+                .refreshToken(refreshTokenDto1)
+                .build();
+        return ResponseEntity.ok(jwtResponse);
+    }
     //login
     @PostMapping("/generate-token")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request){
@@ -40,10 +58,13 @@ public class AuthenticationController {
     User user=(User) userDetailsService.loadUserByUsername(request.getEmail());
     String  token=helper.generateToken(user);
 
+    //Refresh token
+        RefreshTokenDto refreshTokenDto = refreshTokenService.createRefreshToken(user.getEmail());
+
     JwtResponse jwtResponse=JwtResponse.builder().
             token(token).
             user(mapper.map(user, UserDto.class)).
-
+            refreshToken(refreshTokenDto).
             build();
 
         return ResponseEntity.ok(jwtResponse);

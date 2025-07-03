@@ -54,7 +54,7 @@ public class SecurityConfig {
 
                         //API AUTHENTICATION
                         // AUTH APIs - Only POST for token generation is permitted
-                        .requestMatchers(HttpMethod.POST, "/api/auth/generate-token").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/generate-token","/api/auth/regenerate-token").permitAll()
                         .requestMatchers("/api/auth/**").authenticated()
 
                         .anyRequest().authenticated()
