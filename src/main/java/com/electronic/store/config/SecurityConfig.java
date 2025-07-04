@@ -32,12 +32,31 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationEntryPoints entryPoints;
 
+
+    private final String[] PUBLIC_URLS = {
+            "/swagger-ui/**",
+            "/swagger-resources/**",
+            "/webjars/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
 
-        security.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.disable());
-        security.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable());
-        security.authorizeHttpRequests(request -> request
+
+
+        security
+                .cors(cors -> cors.disable())
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(PUBLIC_URLS).permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+
+                        // AUTH APIs
+                        .requestMatchers(HttpMethod.POST, "/api/auth/generate-token", "/api/auth/regenerate-token").permitAll()
+                        .requestMatchers("/api/auth/**").authenticated()
+
                         // USER APIs
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
@@ -46,28 +65,17 @@ public class SecurityConfig {
 
                         // PRODUCT APIs
                         .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
-                        .requestMatchers("/api/products/**").hasRole("ADMIN")  // Applies to POST, PUT, DELETE etc.
+                        .requestMatchers("/api/products/**").hasRole("ADMIN")
 
                         // CATEGORY APIs
-                        .requestMatchers("/api/categories/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
-
-                        //API AUTHENTICATION
-                        // AUTH APIs - Only POST for token generation is permitted
-                        .requestMatchers(HttpMethod.POST, "/api/auth/generate-token","/api/auth/regenerate-token").permitAll()
-                        .requestMatchers("/api/auth/**").authenticated()
+                        .requestMatchers("/api/categories/**").hasRole("ADMIN")
 
                         .anyRequest().authenticated()
-                );
-
-//        security.httpBasic(Customizer.withDefaults());
-        security.exceptionHandling(ex->
-                ex.authenticationEntryPoint(entryPoints));
-
-        security.sessionManagement(session->
-                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        security.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
-
+                )
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(entryPoints))
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
         return security.build();
     }
 

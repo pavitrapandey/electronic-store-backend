@@ -29,6 +29,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        String uri = request.getRequestURI();
+        // ✅ Skip JWT checks for Swagger and open API endpoints
+        if (uri.startsWith("/swagger-ui")
+                || uri.startsWith("/v3/api-docs")
+                || uri.startsWith("/swagger-resources")
+                || uri.startsWith("/webjars")
+                || uri.equals("/swagger-ui.html")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         //api se phle chlega Jwt ko verifiy krne ke liye
         String requestHeader =request.getHeader("Authorization");
 

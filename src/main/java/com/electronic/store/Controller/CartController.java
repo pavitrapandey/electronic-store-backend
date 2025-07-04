@@ -4,6 +4,7 @@ import com.electronic.store.dtos.AddItemToCartRequest;
 import com.electronic.store.dtos.ApiResponseMessage;
 import com.electronic.store.dtos.CartDto;
 import com.electronic.store.service.CartService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
+@Tag(name = "Cart Controller", description = "REST APIs for Cart Management!!!")
 public class CartController {
 
     @Autowired

@@ -4,6 +4,7 @@ import com.electronic.store.dtos.*;
 import com.electronic.store.service.CategoryService;
 import com.electronic.store.service.FileService;
 import com.electronic.store.service.ProductService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import java.io.InputStream;
 
 @RestController
 @RequestMapping("/api/categories")
+@Tag(name = "Category Controller", description = "REST APIs for Category Management!!!")
 public class CategoryController {
 
     @Autowired

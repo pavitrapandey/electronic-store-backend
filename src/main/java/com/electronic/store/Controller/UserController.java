@@ -7,6 +7,10 @@ import com.electronic.store.dtos.PageableRespond;
 import com.electronic.store.dtos.UserDto;
 import com.electronic.store.service.FileService;
 import com.electronic.store.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -27,6 +31,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@Tag(name = "User Controller", description = "REST APIs for User Management!!!")
 public class UserController {
 
     @Autowired
@@ -40,6 +45,12 @@ public class UserController {
 
     //create user
     @PostMapping
+    @Operation(method = "createUser", summary = "Create a new user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized access"),
+    })
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto){
         UserDto user = userService.createUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -47,6 +58,7 @@ public class UserController {
 
     //update user
     @PutMapping("/{userId}")
+    @Operation(method = "updateUser", summary = "Update an existing user")
     public ResponseEntity<UserDto> updateUser(@Valid  @PathVariable("userId") String userId, @RequestBody UserDto userDto){
         UserDto updatedUser = userService.updateUser(userId, userDto);
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -55,6 +67,7 @@ public class UserController {
 
     //delete user
     @DeleteMapping("/{userId}")
+    @Operation(method = "deleteUser", summary = "Delete a user by ID")
     public ResponseEntity<ApiResponseMessage> deleteUser(@PathVariable("userId") String userId) throws IOException{
         userService.deleteUser(userId);
         ApiResponseMessage responseMessage= ApiResponseMessage.builder()
@@ -68,6 +81,7 @@ public class UserController {
 
     //get user by id
     @GetMapping("/{userId}")
+    @Operation(method = "getUserById", summary = "Get a user by ID")
     public ResponseEntity<UserDto> getUser(@PathVariable String userId){
         UserDto user = userService.getUserById(userId);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -75,6 +89,7 @@ public class UserController {
 
     //get all users
     @GetMapping
+    @Operation(method = "getAllUsers", summary = "Get all users with pagination and sorting")
     public ResponseEntity<PageableRespond<UserDto>> getAllUsers(
             @RequestParam(value = "pageNumber", defaultValue = "0",required = false) int pageNumber,
             @RequestParam(value = "size",defaultValue = "10",required = false) int pageSize,
@@ -86,6 +101,7 @@ public class UserController {
 
 //get user by email
     @GetMapping("/email/{email}")
+    @Operation(method = "getUserByEmail", summary = "Get a user by email")
     public ResponseEntity<UserDto> getUserByEmail(@PathVariable String email){
         UserDto user = userService.getUserByEmail(email);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -93,6 +109,7 @@ public class UserController {
 
 //search user
     @GetMapping("/search/{keyword}")
+    @Operation(method = "searchUser", summary = "Search users by keyword")
     public ResponseEntity<List<UserDto>> searchUser(@PathVariable String keyword){
         List<UserDto> users = userService.searchUser(keyword);
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -100,6 +117,7 @@ public class UserController {
 
     //Upload user image
     @PostMapping("/image/{userId}")
+    @Operation(method = "uploadUserImage", summary = "Upload an image for a user")
     public ResponseEntity<ImageResponse> uploadUserImage(
             @PathVariable String userId,
             @RequestParam("image") MultipartFile image) throws IOException {
@@ -116,6 +134,7 @@ public class UserController {
 
     //serve image
     @GetMapping("/image/{userId}")
+    @Operation(method = "serveUserImage", summary = "Serve user image by user ID")
     public void serveUserImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
         UserDto user = userService.getUserById(userId);
         InputStream resource = fileService.getResource(imageUploadPath, user.getImageName());

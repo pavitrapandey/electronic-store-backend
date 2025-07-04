@@ -4,6 +4,7 @@ import com.electronic.store.Security.JwtHelper;
 import com.electronic.store.dtos.*;
 import com.electronic.store.entities.User;
 import com.electronic.store.service.RefreshTokenService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication Controller", description = "REST APIs for Authentication Management!!!")
 public class AuthenticationController {
 
 
