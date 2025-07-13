@@ -34,31 +34,33 @@ public class ElectronicStoreApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		// Fetch or create ROLE_ADMIN
 		Roles admin = roleRepository.findByName("ROLE_ADMIN").orElse(null);
 		if (admin == null) {
-			Roles role = new Roles();
-			role.setRoleId(UUID.randomUUID().toString());
-			role.setName("ROLE_ADMIN");
-			roleRepository.save(role);
+			admin = new Roles(); // ✅ assign to 'admin'
+			admin.setRoleId(UUID.randomUUID().toString());
+			admin.setName("ROLE_ADMIN");
+			roleRepository.save(admin);
 		}
 
+		// Fetch or create ROLE_NORMAL
 		Roles normal = roleRepository.findByName("ROLE_NORMAL").orElse(null);
 		if (normal == null) {
-			Roles role = new Roles();
-			role.setRoleId(UUID.randomUUID().toString());
-			role.setName("ROLE_NORMAL");
-			roleRepository.save(role);
+			normal = new Roles(); // ✅ assign to 'normal'
+			normal.setRoleId(UUID.randomUUID().toString());
+			normal.setName("ROLE_NORMAL");
+			roleRepository.save(normal);
 		}
 
-		User user=userRepository.findByEmail("pavitra@gmail.com").orElse(null);
-
-		if(user==null) {
+		// Create default admin user if not exists
+		User user = userRepository.findByEmail("pavitra@gmail.com").orElse(null);
+		if (user == null) {
 			User user1 = new User();
 			user1.setUserId(UUID.randomUUID().toString());
 			user1.setName("Pavitra");
 			user1.setEmail("pavitra@gmail.com");
 			user1.setPassword(passwordEncoder.encode("pavitra"));
-			user1.setRoles(List.of(admin));
+			user1.setRoles(List.of(admin)); // ✅ now admin is not null
 			user1.setAbout("I am the Admin");
 			user1.setGender("Male");
 

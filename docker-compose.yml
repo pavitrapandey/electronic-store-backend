@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: electronic_store
+      MYSQL_ROOT_PASSWORD: pavitra07   # Add this line (missing root password)
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql     # Match with below
+    networks:
+      - springboot-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: electronicstore
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/electronic_store
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: pavitra07
+    ports:
+      - "8081:9090"
+    depends_on:
+      - mysql
+    networks:
+      - springboot-network
+
+volumes:
+  mysql_data:
+
+networks:
+  springboot-network:
+    driver: bridge
