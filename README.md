@@ -1,7 +1,7 @@
 # 🛒 Electronic Store Backend
 
 A Spring Boot based backend for an electronic store application, built with a modular structure and RESTful APIs.  
-This project includes user authentication with JWT, refresh token handling, and interactive API documentation using Swagger (OpenAPI). Core features include user management, category handling, product operations, cart, and order modules.
+This project includes user authentication with JWT, refresh token handling, and interactive API documentation using Swagger (OpenAPI).
 
 ---
 
@@ -11,7 +11,8 @@ This project includes user authentication with JWT, refresh token handling, and 
 - Register user with:
   - Name, Email, Password, Gender, About, ImageName
 - Login with JWT token
-- Fully tested and validated
+- Profile image upload and management
+- Input validation and secure password handling
 
 ### 🔐 Authentication & Security
 - Integrated **Spring Security**
@@ -19,80 +20,85 @@ This project includes user authentication with JWT, refresh token handling, and 
 - **Refresh Token** mechanism for access token renewal
 - Role-based access control (RBAC)
 
-### 🗂️ Category Module
-- CRUD operations on categories
-- Upload and serve category **cover images**
+### 🗂️ Category & Product Management
+- Complete CRUD operations for categories and products
+- Image upload support for both categories and products
+- Product filtering by price range and category
+- Live/Non-live product status management
 
-### 📦 Product Module
-- Add/Update/Delete/Get Product
-- Get All Live Products
-- Get/Delete Products Between Price Range
-- Create/Update/Delete Products by Category
+### 🛒 Shopping Features
+- Cart management with add/remove/update items
+- Order processing and status tracking
+- Multiple items per order support
+- Order history and status updates
 
-### 🛒 Cart and CartItem Module
-- Add/Update Product to CartItem
-- Delete CartItem
-- Get Cart by User
-
-### 💳 Order Module
-- Create/Get Order
-- Update Order Status
-- Remove Order
-
-### 🧾 API Documentation
-- Added interactive API documentation using **Swagger UI**
-- Built with **OpenAPI Specification**
-- Explore and test all endpoints with ease
-
-### 🔧 Additional Enhancements
-- Input Validation
-- Custom Exception Handling
-- Pagination and Sorting
+### 🔧 Technical Features
+- Environment-based configuration (dev/prod profiles)
+- Docker containerization with docker-compose
+- MySQL database integration
+- Swagger API documentation
+- Custom exception handling
+- Pagination and sorting support
 
 ---
 
 ## 🛠️ Tech Stack
-- Java 17
-- Spring Boot
-- Spring Security
-- JWT (Access + Refresh Tokens)
+- Java 21
+- Spring Boot 3.5.3
+- Spring Security with JWT
 - Spring Data JPA/Hibernate
-- Swagger (OpenAPI)
-- Lombok
+- MySQL 8.0
+- Docker & Docker Compose
 - Maven
-- MySQL
-- Postman
+- Swagger/OpenAPI 3.0
 
 ---
 
-## 📂 Image Uploads
-- Images are stored and served using static resource mapping.
-- `imageName` is used to identify and retrieve the file.
+## 🚀 Getting Started
+
+### Local Development
+1. Clone the repository
+2. Configure MySQL database (default port: 3306)
+3. Run using dev profile: `spring.profiles.active=dev`
+4. Access API at `http://localhost:9090`
+
+### Docker Deployment
+```bash
+docker-compose up -d
+```
+- Application: `http://localhost:8081`
+- MySQL: Port 3308
+
+### Production Deployment
+- Configured for Railway deployment
+- Uses production profile with secure database configuration
+- Swagger UI: `/swagger-ui.html`
+- API Docs: `/v3/api-docs`
 
 ---
 
-## 📞 API Testing
-- Use **Postman** or **Swagger UI** to test the endpoints.
-- Swagger UI available at: `http://localhost:8080/swagger-ui/index.html`
-- JWT-protected endpoints require Bearer Token in headers.
+## 📁 Project Structure
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── com/electronic/store/
+│   │       ├── config/
+│   │       ├── controllers/
+│   │       ├── entities/
+│   │       ├── repositories/
+│   │       └── services/
+│   └── resources/
+│       ├── application.properties
+│       ├── application-dev.properties
+│       └── application-prod.properties
+```
 
 ---
 
-## 🔗 GitHub Repository
-[🔗 Click here to view the repository](https://github.com/pavitrapandey/electronic-store-backend)
-
----
-
-## 🤝 Contributing
-Pull requests are welcome!  
-Feel free to fork, raise issues, or suggest improvements.
-
----
-
-## 📌 Upcoming Features
-- **Cloud Deployment** (AWS/GCP)
-- **Email Notifications**
-- **Admin Dashboard Frontend**
+## 🔗 Additional Resources
+- [GitHub Repository](https://github.com/pavitrapandey/electronic-store-backend)
+- [API Documentation](http://localhost:9090/swagger-ui.html)
 
 ---
 
