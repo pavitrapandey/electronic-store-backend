@@ -1,7 +1,7 @@
 # 🛒 Electronic Store Backend
 
 A Spring Boot based backend for an electronic store application, built with a modular structure and RESTful APIs.  
-This project includes user authentication with JWT and secure token handling, along with features like user management, category handling, and full-fledged product operations.
+This project includes user authentication with JWT, refresh token handling, and interactive API documentation using Swagger (OpenAPI). Core features include user management, category handling, product operations, cart, and order modules.
 
 ---
 
@@ -17,7 +17,7 @@ This project includes user authentication with JWT and secure token handling, al
 - Integrated **Spring Security**
 - **JWT Token-based Authentication**
 - **Refresh Token** mechanism for access token renewal
-- Secure endpoints with role-based access control (RBAC)
+- Role-based access control (RBAC)
 
 ### 🗂️ Category Module
 - CRUD operations on categories
@@ -39,6 +39,11 @@ This project includes user authentication with JWT and secure token handling, al
 - Update Order Status
 - Remove Order
 
+### 🧾 API Documentation
+- Added interactive API documentation using **Swagger UI**
+- Built with **OpenAPI Specification**
+- Explore and test all endpoints with ease
+
 ### 🔧 Additional Enhancements
 - Input Validation
 - Custom Exception Handling
@@ -52,6 +57,7 @@ This project includes user authentication with JWT and secure token handling, al
 - Spring Security
 - JWT (Access + Refresh Tokens)
 - Spring Data JPA/Hibernate
+- Swagger (OpenAPI)
 - Lombok
 - Maven
 - MySQL
@@ -66,9 +72,9 @@ This project includes user authentication with JWT and secure token handling, al
 ---
 
 ## 📞 API Testing
-- Use **Postman** or **Swagger UI** (if integrated) to test the endpoints.
-- Authentication-protected endpoints require Bearer Token in headers.
-- All APIs follow RESTful standards.
+- Use **Postman** or **Swagger UI** to test the endpoints.
+- Swagger UI available at: `http://localhost:8080/swagger-ui/index.html`
+- JWT-protected endpoints require Bearer Token in headers.
 
 ---
 
@@ -84,11 +90,11 @@ Feel free to fork, raise issues, or suggest improvements.
 ---
 
 ## 📌 Upcoming Features
--**Api Documentation** (using Swagger)
 - **Cloud Deployment** (AWS/GCP)
+- **Email Notifications**
+- **Admin Dashboard Frontend**
 
 ---
 
 ## 👨‍💻 Author
 Made with ❤️ by [Pavitra Pandey](https://github.com/pavitrapandey)
-
