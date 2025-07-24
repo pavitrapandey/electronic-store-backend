@@ -45,6 +45,9 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (roles == null) {
+            return new ArrayList<>();
+        }
         Set<SimpleGrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority( role.getName()))  // Adding ROLE_ prefix
                 .collect(Collectors.toSet());
